@@ -29,7 +29,7 @@ public class Widget extends AppWidgetProvider {
         Timetable.loc l = Location.get();
         views.setTextViewText(R.id.textView_top, l.toString());
         views.setTextViewText(R.id.appwidget_text, Timetable.get(l).findFirst().orElse("¯\\_(ツ)_/¯"));
-        views.setTextViewText(R.id.textView_bottom, Timetable.get(l).skip(1).limit(2).collect(Collectors.joining( " " )));
+        views.setTextViewText(R.id.textView_bottom, Timetable.get(l).skip(1).limit(2).collect(Collectors.joining( "  " )));
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
