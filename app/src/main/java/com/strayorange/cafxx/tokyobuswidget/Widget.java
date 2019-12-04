@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,8 +38,8 @@ public class Widget extends AppWidgetProvider {
 
     private static final String ACTION_SCHEDULED_UPDATE = "com.strayorange.cafxx.tokyobuswidget.SCHEDULED_UPDATE";
 
-    static void scheduleUpdate(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    private static void scheduleUpdate(Context context) {
+        AlarmManager alarmManager = (AlarmManager) Objects.requireNonNull(context.getSystemService(Context.ALARM_SERVICE));
         // Substitute AppWidget for whatever you named your AppWidgetProvider subclass
         Intent intent = new Intent(context, Widget.class);
         intent.setAction(ACTION_SCHEDULED_UPDATE);
@@ -51,7 +52,8 @@ public class Widget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(ACTION_SCHEDULED_UPDATE)) {
+        String action = intent.getAction();
+        if (action != null && action.equals(ACTION_SCHEDULED_UPDATE)) {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             int[] ids = manager.getAppWidgetIds(new ComponentName(context, Widget.class));
             onUpdate(context, manager, ids);

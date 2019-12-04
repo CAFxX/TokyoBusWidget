@@ -16,9 +16,9 @@ public class WidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "com.strayorange.cafxx.tokyobuswidget.Widget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private EditText mAppWidgetText;
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = WidgetConfigureActivity.this;
 
@@ -43,7 +43,7 @@ public class WidgetConfigureActivity extends Activity {
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
+    private static void saveTitlePref(Context context, int appWidgetId, String text) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
         prefs.apply();
@@ -51,7 +51,7 @@ public class WidgetConfigureActivity extends Activity {
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
+    private static String loadTitlePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
         if (titleValue != null) {
