@@ -41,4 +41,19 @@
         android:textIsSelectable="false"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@+id/textView_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/appwidget_text"
+        android:layout_alignParentTop="false"
+        android:layout_centerInParent="true"
+        android:autoSizeTextType="uniform"
+        android:contentDescription="@string/appwidget_text_bottom"
+        android:text="@string/appwidget_text_bottom"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textIsSelectable="false"
+        android:textSize="12sp" />
+
 </RelativeLayout>

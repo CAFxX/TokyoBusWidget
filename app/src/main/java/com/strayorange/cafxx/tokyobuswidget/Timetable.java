@@ -1,10 +1,12 @@
 package com.strayorange.cafxx.tokyobuswidget;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 class Timetable {
-    private final static Stream<String> depRH = Stream.of(
+    private final static List<String> depRH = Arrays.asList(
             "08:15",
             "08:24",
             "08:34",
@@ -74,23 +76,19 @@ class Timetable {
             "22:50"
     );
 
-    private final static Stream<String> depSh = Stream.of(
+    private final static List<String> depSh = Arrays.asList(
             "08:00",
             ""
     );
 
+    static Stream<String> get(loc l) {
+        List<String> c = (l == loc.Shibuya ? depSh : depRH);
+        String now = LocalTime.now().toString();
+        return c.stream().filter(e -> e.compareTo(now) >= 0);
+    }
+
     public enum loc {
         Shibuya,
         Roppongi
-    }
-
-    static String getNext(loc l) {
-        return get(l).findFirst().orElse("¯\\_(ツ)_/¯");
-    }
-
-    static Stream<String> get(loc l) {
-        Stream<String> c = (l == loc.Shibuya ? depSh : depRH);
-        String now = LocalTime.now().toString();
-        return c.filter(e -> e.compareTo(now) >= 0);
     }
 }
