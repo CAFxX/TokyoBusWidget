@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TokyoBusWidget</string>
+    <string name="app_name">Tokyo Bus Widget</string>
     <string name="appwidget_text">(time)</string>
     <string name="appwidget_text_top">(location)</string>
     <string name="appwidget_text_bottom">(next times)</string>
