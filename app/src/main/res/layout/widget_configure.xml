@@ -11,6 +11,12 @@
         android:layout_marginBottom="8dp"
         android:text="@string/configure" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bus_stop" />
+
     <Spinner
         android:id="@+id/locationPicker"
         android:layout_width="match_parent"
@@ -20,6 +26,7 @@
         android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:text="@string/add_widget" />
 
