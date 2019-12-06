@@ -27,7 +27,7 @@ public class Widget extends AppWidgetProvider {
         // CharSequence widgetText = WidgetConfigureActivity.loadTitlePref(context, appWidgetId);
         // views.setTextViewText(R.id.appwidget_text, widgetText);
 
-        Timetable.loc l = Location.get();
+        Timetable.loc l = Location.get(context, appWidgetId);
         views.setTextViewText(R.id.textView_top, l.toString());
         views.setTextViewText(R.id.appwidget_text, Timetable.get(l).findFirst().orElse("¯\\_(ツ)_/¯"));
         views.setTextViewText(R.id.textView_bottom, Timetable.get(l).skip(1).limit(2).collect(Collectors.joining( "  " )));
@@ -57,6 +57,7 @@ public class Widget extends AppWidgetProvider {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             int[] ids = manager.getAppWidgetIds(new ComponentName(context, Widget.class));
             onUpdate(context, manager, ids);
+            scheduleUpdate(context);
         }
 
         super.onReceive(context, intent);
@@ -68,15 +69,13 @@ public class Widget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-
-        scheduleUpdate(context);
     }
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            WidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            WidgetConfigureActivity.deletePrefs(context, appWidgetId);
         }
     }
 

@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 /**
  * The configuration screen for the {@link Widget Widget} AppWidget.
@@ -16,8 +18,12 @@ public class WidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "com.strayorange.cafxx.tokyobuswidget.Widget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+    private static final String PREF_LOCATION_KEY_PREFIX = "loc_";
+
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private EditText mAppWidgetText;
+    private Spinner locationPicker;
+
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = WidgetConfigureActivity.this;
@@ -25,6 +31,9 @@ public class WidgetConfigureActivity extends Activity {
             // When the button is clicked, store the string locally
             String widgetText = mAppWidgetText.getText().toString();
             saveTitlePref(context, mAppWidgetId, widgetText);
+
+            String location = locationPicker.getSelectedItem().toString();
+            saveLocationPref(context, mAppWidgetId, location);
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -53,17 +62,24 @@ public class WidgetConfigureActivity extends Activity {
     // If there is no preference saved, get the default from a resource
     private static String loadTitlePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (titleValue != null) {
-            return titleValue;
-        } else {
-            return context.getString(R.string.appwidget_text);
-        }
+        return prefs.getString(PREF_PREFIX_KEY + appWidgetId, "");
     }
 
-    static void deleteTitlePref(Context context, int appWidgetId) {
+    static void deletePrefs(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + appWidgetId);
+        prefs.remove(PREF_LOCATION_KEY_PREFIX + appWidgetId);
+        prefs.apply();
+    }
+
+    static String loadLocationPref(Context context, int appWidgetId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getString(PREF_LOCATION_KEY_PREFIX + appWidgetId, Timetable.loc.Roppongi.toString());
+    }
+
+    private static void saveLocationPref(Context context, int appWidgetId, String text) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
+        prefs.putString(PREF_LOCATION_KEY_PREFIX + appWidgetId, text);
         prefs.apply();
     }
 
@@ -78,6 +94,16 @@ public class WidgetConfigureActivity extends Activity {
         setContentView(R.layout.widget_configure);
         mAppWidgetText = findViewById(R.id.appwidget_text);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
+
+        // Populate the spinner with the locations
+        String[] locations = {
+                Timetable.loc.Roppongi.toString(),
+                Timetable.loc.Shibuya.toString()
+        };
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, locations);
+        locationPicker = findViewById(R.id.locationPicker);
+        locationPicker.setAdapter(spinnerArrayAdapter);
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -94,6 +120,9 @@ public class WidgetConfigureActivity extends Activity {
         }
 
         mAppWidgetText.setText(loadTitlePref(WidgetConfigureActivity.this, mAppWidgetId));
+
+        String ls = loadLocationPref(WidgetConfigureActivity.this, mAppWidgetId);
+        locationPicker.setSelection(spinnerArrayAdapter.getPosition(ls));
     }
 }
 
