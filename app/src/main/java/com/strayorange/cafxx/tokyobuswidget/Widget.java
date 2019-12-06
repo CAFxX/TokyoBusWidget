@@ -24,9 +24,7 @@ public class Widget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 
-        // CharSequence widgetText = WidgetConfigureActivity.loadTitlePref(context, appWidgetId);
-        // views.setTextViewText(R.id.appwidget_text, widgetText);
-
+        // Populate the fields
         Timetable.loc l = Location.get(context, appWidgetId);
         views.setTextViewText(R.id.textView_top, l.toString());
         views.setTextViewText(R.id.appwidget_text, Timetable.get(l).findFirst().orElse("¯\\_(ツ)_/¯"));

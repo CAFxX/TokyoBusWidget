@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 /**
@@ -17,11 +16,9 @@ import android.widget.Spinner;
 public class WidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "com.strayorange.cafxx.tokyobuswidget.Widget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String PREF_LOCATION_KEY_PREFIX = "loc_";
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private EditText mAppWidgetText;
     private Spinner locationPicker;
 
     private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -29,9 +26,6 @@ public class WidgetConfigureActivity extends Activity {
             final Context context = WidgetConfigureActivity.this;
 
             // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
-
             String location = locationPicker.getSelectedItem().toString();
             saveLocationPref(context, mAppWidgetId, location);
 
@@ -51,23 +45,8 @@ public class WidgetConfigureActivity extends Activity {
         super();
     }
 
-    // Write the prefix to the SharedPreferences object for this widget
-    private static void saveTitlePref(Context context, int appWidgetId, String text) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
-        prefs.apply();
-    }
-
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    private static String loadTitlePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getString(PREF_PREFIX_KEY + appWidgetId, "");
-    }
-
     static void deletePrefs(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
         prefs.remove(PREF_LOCATION_KEY_PREFIX + appWidgetId);
         prefs.apply();
     }
@@ -92,7 +71,6 @@ public class WidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.widget_configure);
-        mAppWidgetText = findViewById(R.id.appwidget_text);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Populate the spinner with the locations
@@ -118,8 +96,6 @@ public class WidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-
-        mAppWidgetText.setText(loadTitlePref(WidgetConfigureActivity.this, mAppWidgetId));
 
         String ls = loadLocationPref(WidgetConfigureActivity.this, mAppWidgetId);
         locationPicker.setSelection(spinnerArrayAdapter.getPosition(ls));
