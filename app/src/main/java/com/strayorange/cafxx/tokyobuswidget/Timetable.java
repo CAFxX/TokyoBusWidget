@@ -1,5 +1,7 @@
 package com.strayorange.cafxx.tokyobuswidget;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -147,6 +149,10 @@ class Timetable {
     );
 
     static Stream<String> get(loc l) {
+        DayOfWeek dayOfWeek = LocalDate.now().getDayOfWeek();
+        if ((dayOfWeek == DayOfWeek.SATURDAY) || (dayOfWeek == DayOfWeek.SUNDAY)) {
+            return Stream.empty();
+        }
         List<String> c = (l == loc.Shibuya ? depSh : depRH);
         String now = LocalTime.now().toString();
         return c.stream().filter(e -> e.compareTo(now) >= 0).sorted();
