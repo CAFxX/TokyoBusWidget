@@ -55,7 +55,6 @@ public class Widget extends AppWidgetProvider {
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             int[] ids = manager.getAppWidgetIds(new ComponentName(context, Widget.class));
             onUpdate(context, manager, ids);
-            scheduleUpdate(context);
         }
 
         super.onReceive(context, intent);
@@ -67,6 +66,8 @@ public class Widget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+
+        scheduleUpdate(context);
     }
 
     @Override
