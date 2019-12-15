@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
  */
 public class Widget extends AppWidgetProvider {
 
+    private static final String ACTION_SCHEDULED_UPDATE = "com.strayorange.cafxx.tokyobuswidget.SCHEDULED_UPDATE";
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
@@ -34,8 +36,6 @@ public class Widget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private static final String ACTION_SCHEDULED_UPDATE = "com.strayorange.cafxx.tokyobuswidget.SCHEDULED_UPDATE";
-
     private static void scheduleUpdate(Context context) {
         AlarmManager alarmManager = (AlarmManager) Objects.requireNonNull(context.getSystemService(Context.ALARM_SERVICE));
         // Substitute AppWidget for whatever you named your AppWidgetProvider subclass
@@ -45,7 +45,7 @@ public class Widget extends AppWidgetProvider {
 
         // For API 19 and later, set may fire the intent a little later to save battery,
         // setExact would ensure the intent goes off exactly at midnight, but we don't care.
-        alarmManager.set(AlarmManager.RTC_WAKEUP, java.time.LocalTime.now().plusMinutes(1).getNano()/1000000, pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, java.time.LocalTime.now().plusMinutes(1).getNano() / 1000000, pendingIntent);
     }
 
     @Override
