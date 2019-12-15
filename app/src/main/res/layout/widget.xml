@@ -62,6 +62,7 @@
         android:autoSizeTextType="uniform"
         android:contentDescription="@string/appwidget_text_bottom"
         android:shadowColor="#80000000"
+        android:shadowRadius="4"
         android:text="@string/appwidget_text_bottom"
         android:textAlignment="center"
         android:textColor="@android:color/white"
