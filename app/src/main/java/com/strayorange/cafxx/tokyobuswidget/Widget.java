@@ -44,7 +44,8 @@ public class Widget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         // For API 19 and later, set may fire the intent a little later to save battery,
-        // setExact would ensure the intent goes off exactly at midnight, but we don't care.
+        // setExact would ensure the intent goes off exactly on time, but we don't need extreme
+        // precision.
         alarmManager.set(AlarmManager.RTC_WAKEUP, java.time.LocalTime.now().plusMinutes(1).getNano() / 1000000, pendingIntent);
     }
 
